@@ -23,6 +23,7 @@ import {FlagDisplayComponent} from "../flag-display/flag-display.component";
 export class CitySearchComponent implements OnInit, OnDestroy {
   cityName: string = "Linz";
   searchTriggered: boolean = false;
+  searchHidden: boolean = false;
   citiesFound: CityServiceSearchResultExtendedList = [];
 
   selectedCities: Map<number, {
@@ -33,10 +34,16 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   constructor(private cityService: CityService) {
   }
 
+  OnClear() {
+    this.cityName = "";
+    this.searchHidden = true;
+  }
+
   onSearch() {
     console.log("searching with keyword:", this.cityName);
 
     this.searchTriggered = true;
+    this.searchHidden = false;
     this.cityService.getCitiesHavingName(this.cityName).subscribe(
       cities => {
         // const cities = "results" in result ? result.results: [];

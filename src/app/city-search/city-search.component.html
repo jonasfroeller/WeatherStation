@@ -1,22 +1,24 @@
 <input (ngModelChange)="onSearch()" [(ngModel)]="cityName" placeholder="city name" type="text">
-<button (click)="onSearch()" type="button">search</button><br>
+<button (click)="onSearch()" type="button">search</button>
+<button (click)="OnClear()" type="reset">clear</button><br><br>
 
-<hr>
+@if (!searchHidden) {
+  <hr>
 
-<div class="selectableCityList">
-  @for (city of citiesFound; track (city.country + "/" + city.name)) {
-    <button class="" type="button" [disabled]="selectedCities.get($index)?.visible" (click)="onSelect($index)">{{ city.name }}</button>
-  } @empty {
-    @if (cityName.length > 0 && searchTriggered) {
-      <span>No results...</span>
-    } @else {
-      <span>A list of cities will be displayed here...</span>
+  <div class="selectableCityList">
+    @for (city of citiesFound; track (city.country + "/" + city.name)) {
+      <button class="" type="button" [disabled]="selectedCities.get($index)?.visible" (click)="onSelect($index)">{{ city.name }}</button>
+    } @empty {
+      @if (cityName.length > 0 && searchTriggered) {
+        <span>No results...</span>
+      } @else {
+        <span>A list of cities will be displayed here...</span>
+      }
     }
-  }
-</div>
+  </div>
 
-<hr>
-
+  <hr>
+}
 
 @for (selectedCity of selectedCities; track (selectedCity[1].data.country + "/" + selectedCity[1].data.name + "/detail")) {
   @if (selectedCity[1].visible) {

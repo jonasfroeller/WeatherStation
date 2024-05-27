@@ -2,8 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CityService} from "../city.service";
 import {
   CityServiceSearchResultExtendedList,
-  CityServiceSearchResultExtension,
-  MinimalCityServiceDataResult
+  TotalCityInformation
 } from "../types";
 
 import {FormsModule} from "@angular/forms";
@@ -23,11 +22,13 @@ import {FlagDisplayComponent} from "../flag-display/flag-display.component";
 })
 export class CitySearchComponent implements OnInit, OnDestroy {
   cityName: string = "Linz";
-  searchPushed: boolean = false;
+  searchTriggered: boolean = false;
   citiesFound: CityServiceSearchResultExtendedList = [];
-  selectedCityIndex: number = 0;
-  selectedCity: CityServiceSearchResultExtension | null = null;
-  displayedCity: MinimalCityServiceDataResult | null = null;
+
+  selectedCities: Map<number, {
+    visible: boolean,
+    data: TotalCityInformation
+  }> = new Map();
 
   constructor(private cityService: CityService) {
   }
@@ -35,12 +36,25 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   onSearch() {
     console.log("searching with keyword:", this.cityName);
 
-    this.searchPushed = true;
+    this.searchTriggered = true;
     this.cityService.getCitiesHavingName(this.cityName).subscribe(
       cities => {
         // const cities = "results" in result ? result.results: [];
         // this.citiesFound = Array.isArray(cities) && cities.length > 0 ? cities : [];
         this.citiesFound = cities;
+
+        for (let i = 0; i < this.citiesFound.length; i++) {
+          this.selectedCities.set(i, {
+            visible: false,
+            data: {
+              ...this.citiesFound[i],
+              elevation: -1,
+              current_units: null,
+              current: null,
+              daily: null
+            }
+          });
+        }
 
         console.log(this.citiesFound);
       }
@@ -50,16 +64,19 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   onSelect(index: number) {
     console.log("selected city:", index);
 
-    this.searchPushed = false;
-    this.selectedCityIndex = index;
-    this.selectedCity = this.citiesFound[Number(this.selectedCityIndex)];
+    this.searchTriggered = false;
 
-    this.cityService.getDataOfCityByLatitudeAndLongitude(this.selectedCity?.longitude as number, this.selectedCity?.latitude as number).subscribe(
-      city => {
-        this.displayedCity = city;
-        console.log("displayed city:", this.displayedCity);
-      }
-    )
+    const selectedCity = this.selectedCities.get(index);
+    if (selectedCity) {
+      this.cityService.getDataOfCityByLatitudeAndLongitude(selectedCity.data.longitude, selectedCity.data.latitude).subscribe(
+        city => {
+          this.selectedCities.set(index, {visible: true, data: {
+              ...this.citiesFound[index],
+              ...city
+          }});
+        }
+      )
+    }
   }
 
   ngOnDestroy(): void {

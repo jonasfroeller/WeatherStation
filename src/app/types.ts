@@ -2,7 +2,6 @@ export interface CityServiceSearchResult {
   name: string;
   latitude: number;
   longitude: number;
-  elevation: number;
   country_code: string;
   timezone: string;
   population: number;
@@ -15,26 +14,22 @@ export interface CityServiceSearchResultExtension extends CityServiceSearchResul
 
 export type CityServiceSearchResultExtendedList = CityServiceSearchResultExtension[];
 
-interface CityServiceDataResult {
-  latitude: number;
-  longitude: number;
-  timezone: string;
+export interface CityServiceDataResult {
   elevation: number;
   current_units: {
     time: string; // iso standard
     interval: string;
     temperature_2m: string;
-  },
+  } | null,
   current: {
     time: string;
     temperature_2m: number;
-  },
+  } | null,
   daily: {
     time: string[];
     temperature_2m_max: number[];
     temperature_2m_min: number[];
-  }
+  } | null
 }
 
-type IgnoredCityServiceDataResult = "latitude" | "longitude" | "timezone" | "elevation";
-export type MinimalCityServiceDataResult = Omit<CityServiceDataResult, IgnoredCityServiceDataResult>
+export interface TotalCityInformation extends CityServiceSearchResultExtension, CityServiceDataResult {};

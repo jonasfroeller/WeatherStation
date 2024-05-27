@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {CityServiceSearchResultExtendedList, MinimalCityServiceDataResult} from "./types";
+import {CityServiceSearchResultExtendedList, CityServiceDataResult} from "./types";
 import {map, Observable, tap} from "rxjs";
 
 // @ts-ignore
@@ -42,10 +42,10 @@ export class CityService {
       )) ?? []);
   }
 
-  getDataOfCityByLatitudeAndLongitude(cityLongitude: number, cityLatitude: number): Observable<MinimalCityServiceDataResult> {
+  getDataOfCityByLatitudeAndLongitude(cityLongitude: number, cityLatitude: number): Observable<CityServiceDataResult> {
     console.log("getDataOfCityByLatitudeAndLongitude()");
 
-    return this.httpClient.get<MinimalCityServiceDataResult>(CityService.DATA_URL(cityLongitude, cityLatitude))
+    return this.httpClient.get<CityServiceDataResult>(CityService.DATA_URL(cityLongitude, cityLatitude))
       .pipe(tap(r => {
         console.log(r)
       }));

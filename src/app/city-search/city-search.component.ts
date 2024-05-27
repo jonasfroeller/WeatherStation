@@ -1,9 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CityService} from "../city.service";
-import {
-  CityServiceSearchResultExtendedList,
-  TotalCityInformation
-} from "../types";
+import {CityServiceSearchResultExtendedList, TotalCityInformation} from "../types";
 
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
@@ -30,6 +27,7 @@ export class CitySearchComponent implements OnInit, OnDestroy {
     visible: boolean,
     data: TotalCityInformation
   }> = new Map();
+  protected readonly JSON = JSON;
 
   constructor(private cityService: CityService) {
   }
@@ -77,10 +75,23 @@ export class CitySearchComponent implements OnInit, OnDestroy {
     if (selectedCity) {
       this.cityService.getDataOfCityByLatitudeAndLongitude(selectedCity.data.longitude, selectedCity.data.latitude).subscribe(
         city => {
-          this.selectedCities.set(index, {visible: true, data: {
+          const mutatedCityTemperature = (city.daily?.time.map(
+            (time: string, index: number) => ({
+              time: time,
+              temperature_2m_max: city.daily?.temperature_2m_max[index] ?? -1,
+              temperature_2m_min: city.daily?.temperature_2m_min[index] ?? -1,
+            })
+          ) ?? [])
+
+          this.selectedCities.set(index, {
+            visible: true, data: {
               ...this.citiesFound[index],
-              ...city
-          }});
+              daily: mutatedCityTemperature,
+              elevation: city.elevation,
+              current_units: city.current_units,
+              current: city.current
+            }
+          });
         }
       )
     }

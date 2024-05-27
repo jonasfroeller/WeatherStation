@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {CityServiceSearchResultExtendedList, CityServiceDataResult} from "./types";
+import {CityServiceDataResult, CityServiceSearchResultExtendedList} from "./types";
 import {map, Observable, tap} from "rxjs";
 
 // @ts-ignore

@@ -7,7 +7,9 @@
 
   <div class="selectableCityList">
     @for (city of citiesFound; track (city.country + "/" + city.name)) {
-      <button class="" type="button" [disabled]="selectedCities.get($index)?.visible" (click)="onSelect($index)">{{ city.name }}</button>
+      <button class="" type="button" [disabled]="selectedCities.get($index)?.visible"
+              (click)="onSelect($index)">{{ city.name }}
+      </button>
     } @empty {
       @if (cityName.length > 0 && searchTriggered) {
         <span>No results...</span>
@@ -23,12 +25,37 @@
 @for (selectedCity of selectedCities; track (selectedCity[1].data.country + "/" + selectedCity[1].data.name + "/detail")) {
   @if (selectedCity[1].visible) {
     <h2>{{ selectedCity[1].data.name }}, {{ selectedCity[1].data.country }},
-      <app-flag-display [countryCode]="selectedCity[1].data.country_code" [flagIcon]="selectedCity[1].data.flagIcon"></app-flag-display>
+      <app-flag-display [countryCode]="selectedCity[1].data.country_code"
+                        [flagIcon]="selectedCity[1].data.flagIcon"></app-flag-display>
       ({{ selectedCity[1].data.timezone }})
     </h2><br>
     <span>{{ selectedCity[1].data.longitude }} / {{ selectedCity[1].data.latitude }}</span><br>
     <p>
-      {{ selectedCity[1].data.current?.temperature_2m }} {{ selectedCity[1].data.current_units?.temperature_2m }} ({{ selectedCity[1].data.current?.time }})
+      {{ selectedCity[1].data.current?.temperature_2m }} {{ selectedCity[1].data.current_units?.temperature_2m }}
+      ({{ selectedCity[1].data.current?.time }})
     </p>
+
+    @if (selectedCity[1].data.daily) {
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Min Temperature</th>
+            <th>Max Temperature</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (day of selectedCity[1].data.daily; track $index) {
+              <tr>
+                <td>{{ day.time }}</td>
+                <td>{{ day.temperature_2m_min }}</td>
+                <td>{{ day.temperature_2m_max }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
   }
 }

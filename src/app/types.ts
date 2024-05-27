@@ -32,4 +32,13 @@ export interface CityServiceDataResult {
   } | null
 }
 
-export interface TotalCityInformation extends CityServiceSearchResultExtension, CityServiceDataResult {};
+export interface PrettierCityServiceDataResult extends Omit<CityServiceDataResult, "daily"> {
+  daily: {
+    time: string;
+    temperature_2m_max: number;
+    temperature_2m_min: number;
+  }[] | null
+}
+
+export interface TotalCityInformation extends CityServiceSearchResultExtension, PrettierCityServiceDataResult {
+}

@@ -1,6 +1,6 @@
 <input (ngModelChange)="onSearch()" [(ngModel)]="cityName" placeholder="city name" type="text">
 <button (click)="onSearch()" type="button">search</button>
-<button (click)="OnClear()" type="reset">clear</button><br><br>
+<button (click)="onClear()" type="reset">clear</button><br><br>
 
 @if (!searchHidden) {
   <hr>
@@ -24,7 +24,7 @@
 
 @for (selectedCity of selectedCities; track (selectedCity[1].data.country + "/" + selectedCity[1].data.name + "/detail")) {
   @if (selectedCity[1].visible) {
-    <h2>{{ selectedCity[1].data.name }}, {{ selectedCity[1].data.country }},
+    <h2><button (click)="onUnselect($index)" type="button">{{ selectedCity[1].data.name }}</button>, {{ selectedCity[1].data.country }},
       <app-flag-display [countryCode]="selectedCity[1].data.country_code"
                         [flagIcon]="selectedCity[1].data.flagIcon"></app-flag-display>
       ({{ selectedCity[1].data.timezone }})

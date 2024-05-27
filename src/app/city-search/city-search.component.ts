@@ -32,7 +32,7 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   constructor(private cityService: CityService) {
   }
 
-  OnClear() {
+  onClear() {
     this.cityName = "";
     this.searchHidden = true;
   }
@@ -64,6 +64,21 @@ export class CitySearchComponent implements OnInit, OnDestroy {
         console.log(this.citiesFound);
       }
     )
+  }
+
+  onUnselect(index: number) {
+    console.log("unselecting city:", index);
+
+    this.selectedCities.set(index, {
+      visible: false,
+      data: {
+        elevation: -1,
+        current_units: null,
+        current: null,
+        daily: null,
+        ...this.citiesFound[index]
+      }
+    });
   }
 
   onSelect(index: number) {

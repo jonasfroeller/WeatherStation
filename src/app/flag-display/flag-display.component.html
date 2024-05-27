@@ -1,0 +1,5 @@
+@if (isChrome) {
+  <img [src]="flagURL" [alt]="countryCode">
+} @else {
+  <span class="flag">{{ flagIcon }}</span>
+}

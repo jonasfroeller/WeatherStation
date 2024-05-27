@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
+import {CitySearchComponent} from "./city-search/city-search.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CitySearchComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

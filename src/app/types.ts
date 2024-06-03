@@ -1,3 +1,23 @@
+export type NameOfLocation = {
+  lat: string,
+  lon: string,
+  display_name: string,
+  address: {
+  house_number: string,
+    road: string,
+    neighbourhood: string,
+    suburb: string,
+    village: string,
+    town: string,
+    county: string,
+    state: string,
+    "ISO3166-2-lvl4": string,
+    postcode: string,
+    country: string,
+    country_code: string
+  }
+}
+
 export interface CityServiceSearchResult {
   name: string;
   latitude: number;

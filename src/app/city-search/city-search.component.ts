@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {CityService} from "../city.service";
-import {CityServiceSearchResultExtendedList, TotalCityInformation} from "../types";
+import {CityServiceSearchResultExtendedList, NameOfLocation, TotalCityInformation} from "../types";
 
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {FlagDisplayComponent} from "../flag-display/flag-display.component";
+import {LocationService} from "../location.service";
 
 @Component({
   selector: 'app-city-search',
@@ -17,7 +18,7 @@ import {FlagDisplayComponent} from "../flag-display/flag-display.component";
   templateUrl: './city-search.component.html',
   styleUrl: './city-search.component.css'
 })
-export class CitySearchComponent implements OnInit, OnDestroy {
+export class CitySearchComponent implements OnInit, OnDestroy, AfterViewInit {
   cityName: string = "Linz";
   searchTriggered: boolean = false;
   searchHidden: boolean = false;
@@ -29,7 +30,7 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   }> = new Map();
   protected readonly JSON = JSON;
 
-  constructor(private cityService: CityService) {
+  constructor(private cityService: CityService, private locationService: LocationService) {
   }
 
   onClear() {
@@ -114,10 +115,25 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('CityService ngOnDestroy()');
+    console.log('CitySearch ngOnDestroy()');
   }
 
-  ngOnInit(): void { // TODO: get data of city, that the user is located in
-    console.log('CityService ngOnInit()');
+  ngOnInit(): void {
+    console.log('CitySearch ngOnInit()');
+  }
+
+  ngAfterViewInit(): void {
+    console.log('CitySearch ngAfterViewInit()');
+
+    this.locationService.getLocation().subscribe(
+      (value: NameOfLocation) => {
+        console.log("location fetched:", value.address.town);
+        this.cityName = value.address.town;
+        this.onSearch();
+      },
+      error => {
+        console.error("Error fetching location:", error);
+      }
+    )
   }
 }

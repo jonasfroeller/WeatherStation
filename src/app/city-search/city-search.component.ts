@@ -35,6 +35,7 @@ export class CitySearchComponent implements OnInit, OnDestroy {
   onClear() {
     this.cityName = "";
     this.searchHidden = true;
+    this.citiesFound = []
   }
 
   onSearch() {

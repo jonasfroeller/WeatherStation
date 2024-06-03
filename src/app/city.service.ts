@@ -28,7 +28,6 @@ export class CityService {
   getCitiesHavingName(cityName: string): Observable<CityServiceSearchResultExtendedList> {
     console.log("getCitiesHavingName()");
 
-    // @ts-ignore
     return this.httpClient.get<{ results: CityServiceSearchResultExtendedList }>(CityService.SEARCH_URL(cityName))
       .pipe(tap(r => {
         console.log(r)
